@@ -51,7 +51,7 @@ function check() {
         $error["component"] = "username";
     }
     if (!filter_var($_POST["anweshasignup"], FILTER_VALIDATE_REGEXP, array("options" => array('regexp' => '/^ANW[I]?[\d]{4,6}$/'))) ||   
-                 !verify_anw_id($_POST["anweshasignup"])) {
+                 verify_anw_id($_POST["anweshasignup"])) {
         $error["msg"] = "Inappropriate Anwesha ID.";
         $error["component"] = "anwesha";
     }

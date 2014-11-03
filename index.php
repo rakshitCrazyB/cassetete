@@ -19,7 +19,7 @@
 
 
 
-
+session_start();
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
 function checkLogin() {
@@ -59,12 +59,14 @@ if (isset($_POST["login"]) && isset($_POST["password"])) {
     $error = checkLogin();
     if (!$error["error"]) {
         $user = $error["username"];
+        $_SESSION['username']=$user;
+        header("Location:game.html");
         unset($error);
     }
 }
 $from = "homepage";
 
-require './support/check.php';
+//require './support/check.php';
 ?>
 
 <!DOCTYPE html>
@@ -72,8 +74,8 @@ require './support/check.php';
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title>NJATH - ANWESHA 2k14 - HOME</title>
-        <link href="index.css" rel="stylesheet" type="text/css" />
-        <link href="navbar.css" rel="stylesheet" type="text/css" />
+        <link href="css/index.css" rel="stylesheet" type="text/css" />
+        <link href="css/navbar.css" rel="stylesheet" type="text/css" />
         <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
         <script type="text/javascript" src="js/g.js"></script>
         <script type="text/javascript" src="js/sliderman.1.3.7.js"></script>
