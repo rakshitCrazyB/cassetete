@@ -1,0 +1,49 @@
+<!--
+/*
+ * Copyright (C) 2014 radsaggi(ashutosh)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+ -->
+
+
+<!DOCTYPE html>
+<html ng-app="njath">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>NJATH - Question</title>
+        <link href="css/navbar.css" rel="stylesheet" type="text/css" />
+        <link href="css/profile.css" rel="stylesheet" type="text/css" />
+        <link href="css/question.css" rel="stylesheet" type="text/css" />
+
+        <script type="text/javascript" src="js/angular.min.js"></script>
+        <script type="text/javascript" src="js/game.js"></script>
+        <script type="text/javascript" src="js/profile.js"></script>
+        <script type="text/javascript" src="js/question.js"></script>
+    </head>
+    <body ng-controller="DisplayController as display">
+
+        <nav-bar></nav-bar>
+
+        <div id="profile-page" ng-show="display.showingProfilePage()">
+            <button-wrapper id="button-wrapper"></button-wrapper>
+        <!--<user-info id="user-info"></user-info>-->
+        </div>
+
+        <div id="question-page" ng-show="display.showingQuestionPage()">
+            <question-display></question-display>
+            <form-wrapper id="form-wrapper"></form-wrapper>
+        </div>
+    </body>
+</html>
