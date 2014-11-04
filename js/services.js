@@ -28,7 +28,13 @@ app.factory('Profile', ['$resource', function($resource) {
 
 app.factory('Question', ['$resource', function($resource) {
     return $resource('ques.php', {}, {
-      invoke: {method:'GET', params:{id:'@id'}, isArray:false}
+      invoke: {method:'GET', params:{id: '@id'}, isArray:false}
+    });
+}]);
+
+app.factory('Answer', ['$resource', function($resource) {
+    return $resource('answer.php', {}, {
+      invoke: {method:'POST', params:{id: '@id', answer: '@answer'}, isArray:false}
     });
 }]);
 

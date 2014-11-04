@@ -25,7 +25,7 @@ app.controller("ProfileController", ['$scope','Profile', function($scope, profil
     var buttonwrapper = this;
     var setup = function(profileState) {
         buttonwrapper.level = profileState.level;
-        buttonwrapper.questions = profileState.levelQuestions;
+        buttonwrapper.questions = profileState.levelquestions;
         buttonwrapper.qimage = function(question) {
             switch (question.qstate) {
                 case 0: return "images/quest2.png";
@@ -54,7 +54,7 @@ app.controller("ProfileController", ['$scope','Profile', function($scope, profil
             score: 560,
             username: 'radsaggi',
             level: 1,
-            levelQuestions: [
+            levelquestions: [
                 {qid: 10, qstate: 0, qvalue: 100},
                 {qid: 11, qstate: 1, qvalue: 100},
                 {qid: 12, qstate: 2, qvalue: 100},
