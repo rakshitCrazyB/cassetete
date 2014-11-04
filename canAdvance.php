@@ -1,3 +1,6 @@
+
+
+
 <?php
 /*
  * Copyright (C) 2014 crazyb(Rakshit) , SageEx(Arindam) , Codez266()Sumit)
@@ -14,26 +17,42 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */	
+ */
 $AUTH['required']=true;
 require 'server.php';
 require_once("auth.php");
 if($AUTH['status'])
 {
-	getProfile($uname);
+	canAdvance($uname);
 }
-	function getProfile($uname)
-	{	$username=$uname;
-		$user = new player;
-		$user->setPlayer($username);
-		$userdetails = array();
-		$userdetails['username'] = $user->username;
-		$userdetails['score'] = $user->score;
-		$userdetails['level'] = $user->level;
-		$userdetails['disqualified'] = $user->disqualified;
-		$userdetails['tchests'] = $user->tchests;
-		$userdetails['levelquestions'] = $user->levelquestions;
-		http_respond(200,$userdetails);
+ function canAdvance($uname)
+{
+	$current = new player();
+	$current->setPlayer($uname);
+	$currLevel=$current->level;
+	$i=0;
+	$ne=2;	//This is the minimum no. of questions the player has to answer in each round to get to the next round.
+		//Change this value to modify this minimum number of questions.
+	foreach($current->levelquestions as $q)
+	{ 	//for all level questions
+		if($q['qstate']==2)
+		{				//checking if answered
+			$i++;
+		}
 	}
+	if($i<$ne)
+	{
+		$arr['error']="required number of qs not answered";
+		http_respond(403,$arr);
+	}
+	if($i>=$ne)
+	{
+		$current->level++;
+		$current->write_back();
+		//$current->score+=(advance_score_bonus);
+		$arr['stat']="1";
+		http_respond(200,$arr);
+	}		
+}
+
 ?>
-	

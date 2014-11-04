@@ -1,4 +1,4 @@
-<?php
+<?
 /*
  * Copyright (C) 2014 crazyb(Rakshit) , SageEx(Arindam) , Codez266()Sumit)
  *
@@ -15,7 +15,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-	$session_start();
-	$session_destroy();
-	header("Location:index.php?msg=loggedout");
+	require_once("userclass.php");
+	require_once("Question.php");
+	require_once("support/dbcon.php");
+	
+	
+	function getQuestionCost($level) {
+		return 100;
+	}
+	
+	function getQuestionMaxScore($level) {
+	
+	}
+	
+	function getQuestionScore() {
+		return 100;
+	}
+	
 ?>
+	
+	
+	
+	
+		
+		
+		
+		

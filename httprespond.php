@@ -15,7 +15,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-	$session_start();
-	$session_destroy();
-	header("Location:index.php?msg=loggedout");
+function http_respond($httpstatuscode,$array=false)
+{
+	http_response_code($httpstatuscode);
+	header('Content-Type: application/json');
+	if($array!=false){
+		echo json_encode($array);
+	}
+	die();
+}
 ?>

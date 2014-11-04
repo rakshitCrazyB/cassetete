@@ -15,7 +15,36 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-	$session_start();
-	$session_destroy();
-	header("Location:index.php?msg=loggedout");
+
+/**
+ * Arguments 
+ * AUTH['required'] = TRUE | FALSE
+ * 
+ * Return
+ * AUTH['status'] Authenticated?
+ */
+require("httprespond.php");
+$AUTH['status']=true;
+$uname=0;
+if($AUTH['required']) {
+	session_start();
+	if(isset($_SESSION['username'])) {
+		$uname=$_SESSION['username'];
+		require_once("userclass.php");
+		$status=true;
+		$current=new player();
+		$current->setPlayer($uname);
+		if($current->disqualified==1)
+		{
+			$tosend['error']="DQ";
+			http_respond(406,$tosend);
+		}
+	}
+	else{
+		http_respond(401);
+		$AUTH['status'] = false;
+	}
+}
+
+
 ?>
