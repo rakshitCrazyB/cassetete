@@ -51,7 +51,7 @@ if (!isset($db_connection)) {
     }
 
     global $db_connection;
-    $db_connection = mysqli_connect("localhost", $db_username, $db_password, "anwesha_njath");
+    $db_connection = mysqli_connect("localhost", $db_username, $db_password, "njath0.2");
     // Check connection
     if (mysqli_connect_errno()) {
         throw new Exception("Failed to connect to MySQL: " . mysqli_connect_error());
