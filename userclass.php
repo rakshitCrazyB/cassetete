@@ -1,5 +1,4 @@
-<!--
-/*
+<?php /*
  * Copyright (C) 2014 crazyb(Rakshit) , SageEx(Arindam) , Codez266()Sumit)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -15,8 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- -->
-<?php 
 class player
 {
 	public  $username, $score,$level,$disqualified,$tchests,$levelquestions=array();//qid, qstate(0-unopned,1- opened,2-answereed) qvalue
@@ -83,6 +80,7 @@ class player
 
 	function write_back()
 	{
+		echo "hi";
 		$level=$this->level;
 		$score=$this->score;
 		$tchests=$this->tchests;

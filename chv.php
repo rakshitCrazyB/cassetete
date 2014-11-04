@@ -1,4 +1,4 @@
-<!--
+<?php
 /*
  * Copyright (C) 2014 crazyb(Rakshit) , SageEx(Arindam) , Codez266()Sumit)
  *
@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- -->
-<?php
-
 /** 
  * Arguments 
  * CHV[idx] = an array representing the required arguments and their matching regex

@@ -1,4 +1,4 @@
-<!--
+<?
 /*
  * Copyright (C) 2014 crazyb(Rakshit) , SageEx(Arindam) , Codez266()Sumit)
  *
@@ -14,9 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
- -->
-<?	
+ */	
 require("server.php");
 $AUTH['required']=true;
 require_once("auth.php");

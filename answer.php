@@ -1,4 +1,5 @@
-<!--
+<?php
+
 /*
  * Copyright (C) 2014 crazyb(Rakshit) , SageEx(Arindam) , Codez266()Sumit)
  *
@@ -15,9 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- -->
 
-<?php
 require("server.php");
 $AUTH['required']=true;
 
@@ -47,11 +46,14 @@ function checkAnswer($qid,$answer,$uname)// answer,qid feilds
 		$flag=0;
 		for($i=0;$i<sizeof($current->levelquestions);$i++)
 		{
+
 			if($current->levelquestions[$i]['qid']==$qid)
 			{
 				$flag++;
+				echo $current->levelquestions[$i]['qstate'];
 				if($current->levelquestions[$i]['qstate']==2)
 				{
+					echo "hyuio";
 					http_respond(400);   // already answered
 				}
 			}
@@ -64,19 +66,32 @@ function checkAnswer($qid,$answer,$uname)// answer,qid feilds
 			if($answer == $question->answer)
 			{
 				$scobt=$question->cscore;
-				$current->score+=$question->cscore;
-				$current->levelquestions[$qid] = 2;
 				$user = $current->username;
 				$timeAns = time();
+				
+				$scobt=50;////////to be changed
 				$query = "UPDATE `Questions-$user` SET `Attempts` = `Attempts`+1 ,`Time Answered`=$timeAns , `Obtained Score`=$scobt WHERE `Question ID` = '$qid'	";
 				$db_connection = $GLOBALS['db_connection'];
 				if(!isset($db_connection))
 				{
+					
 					http_respond(500);
 				}
 				else
-				{
-					mysqli_query($db_connection,$query);//query to increment attempts
+				{	
+					$question->cscore=50;/////to be changed
+					echo $query;
+					$result=mysqli_query($db_connection,$query);//query to increment attempts
+					$q=getQuestion($qid);
+					$q->numsolved++;
+					$q->write_back();
+					$current->score+=$question->cscore;
+					$current->write_back();
+					if(!$result)
+					{
+						echo "eooro 5";
+						http_respond(500);
+					}
 					$tosend['stat']=1;
 					http_respond(200,$tosend);
 				}
@@ -91,7 +106,12 @@ function checkAnswer($qid,$answer,$uname)// answer,qid feilds
 				}
 				else
 				{
-					mysqli_query($db_connection,$query);//query to increment attempts
+					$result=mysqli_query($db_connection,$query);//query to increment attempts
+					if(!$result)
+					{
+						echo "eooro 5";
+						http_respond(500);
+					}
 					$tosend['stat']=0;
 					http_respond(200,$tosend);
 				}
