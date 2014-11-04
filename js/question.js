@@ -19,38 +19,59 @@
 
 (function() {
 
-var app = angular.module('question', []);
+var app = angular.module('question', ['services']);
+
+var taunts = [
+    "Are you sure??",
+    "May I lock it?",
+    "Double check!!",
+    "Easy, aint it?",
+    "Very peculiar!"
+];
+
+/*app.controller("QuestionController", function() {
+    question = {
+        type: 3,
+        id: 123,
+        text: "Who am i?",
+        image: '0Wcc.png'
+    };
+});*/
 
 
-app.directive("questionDisplay", function() {
-    return {
-        restrict: 'E',
-        templateUrl: 'question-display.html',
-        controller: function() {
-            this.text = question.text;
-            this.image = "images/" + question.image;
+app.controller("QuestionController", ['$scope','Question', function($scope, question) {
+    var display = this;
+    var setup = function(question) {
+        display.text = question.text;
+        display.image = "images/" + question.image;
 
-            this.showText = (question.type & 1) == 1;
-            this.showImage = (question.type & 2) == 2;
+        display.showText = (question.type & 1) == 1;
+        display.showImage = (question.type & 2) == 2;
 
+        display.qtypeString = function() {
             switch (question.type) {
-                case 1: this.qtypeString = "question-text"; break;
-                case 2: this.qtypeString = "question-image"; break;
-                case 3: this.qtypeString = "question-both"; break;
+                case 1: return "question-text";
+                case 2: return "question-image";
+                case 3: return "question-both";
             }
+        }
+    }
 
-        },
-        controllerAs: 'question'
-    };
-});
-
-
-app.directive("formWrapper", function() {
-    return {
-        restrict: 'E',
-        templateUrl: 'question-form.html'
-    };
-});
+    var future = question.invoke({id: 112}).$promise;
+    future.then(function(data) {
+        var quest = data;
+        setup(quest);
+    }, function(error) {
+        alert("Error: " + error);
+        var quest = {
+            type: 3,
+            id: 123,
+            text: "Who am i?",
+            image: '0Wcc.png'
+        };
+        setup(quest);
+    });
+}]);
 
 app.controller("SubmitAnswerController", function() {
     this.answer = "";
@@ -64,20 +85,5 @@ app.controller("TauntController", function() {
         return taunts[0];
     };
 });
-
-var question = {
-    type: 3,
-    id: 123,
-    text: "Who am i?",
-    image: '0Wcc.png'
-};
-
-var taunts = [
-    "Are you sure??",
-    "May I lock it?",
-    "Double check!!",
-    "Easy, aint it?",
-    "Very peculiar!"
-];
 
 })();

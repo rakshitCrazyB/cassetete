@@ -17,9 +17,59 @@
  */
 
 
-(function(){
+(function() {
 
-var app = angular.module('profile', []);
+var app = angular.module('profile', ['services']);
+
+app.controller("ProfileController", ['$scope','Profile', function($scope, profile) {
+    var buttonwrapper = this;
+    var setup = function(profileState) {
+        buttonwrapper.level = profileState.level;
+        buttonwrapper.questions = profileState.levelQuestions;
+        buttonwrapper.qimage = function(question) {
+            switch (question.qstate) {
+                case 0: return "images/quest2.png";
+                case 1: return "images/exclaim.png";
+                case 2: return "images/tick.png";
+            }
+        };
+        buttonwrapper.qstateString = function(question) {
+            switch (question.qstate) {
+                case 0: return "unopened";
+                case 1: return "opened";
+                case 2: return "answered";
+            }
+        };
+    };
+
+    var future = profile.invoke().$promise;
+    alert("Happy Birthday");
+    future.then(function(data) {
+        var profileState = data;
+        alert("Happy Budday");
+        setup(profileState);
+    }, function(error) {
+        alert("Error: " + error);
+        var profileState = {
+            score: 560,
+            username: 'radsaggi',
+            level: 1,
+            levelQuestions: [
+                {qid: 10, qstate: 0, qvalue: 100},
+                {qid: 11, qstate: 1, qvalue: 100},
+                {qid: 12, qstate: 2, qvalue: 100},
+                {qid: 20, qstate: 0, qvalue: 100},
+                {qid: 21, qstate: 1, qvalue: 100},
+                {qid: 22, qstate: 2, qvalue: 100}
+            ]
+        };
+        setup(profileState);
+    });
+}]);
+
+
+//app.controller("ProfileController", function() {
+//});
 
 /*app.directive("userInfo", function(){
     return{
@@ -32,45 +82,6 @@ var app = angular.module('profile', []);
     };
 });*/
 
-app.directive("buttonWrapper", function(){
-    return{
-        restrict: 'E',
-        templateUrl: 'profile-button-wrapper.html',
-        controller: function() {
-            this.level = profileState.level;
-            this.questions = profileState.levelQuestions;
-            this.qimage = function(question) {
-                switch (question.qstate) {
-                    case 0: return "images/quest2.png";
-                    case 1: return "images/exclaim.png";
-                    case 2: return "images/tick.png";
-                }
-            };
-            this.qstateString = function(question) {
-                switch (question.qstate) {
-                    case 0: return "unopened";
-                    case 1: return "opened";
-                    case 2: return "answered";
-                }
-            };
-        },
-        controllerAs: 'buttonBoxHelper'
-    };
-});
-
-var profileState = {
-    score: 560,
-    username: 'radsaggi',
-    level: 1,
-    levelQuestions: [
-        {qid: 10, qstate: 0, qvalue: 100},
-        {qid: 11, qstate: 1, qvalue: 100},
-        {qid: 12, qstate: 2, qvalue: 100},
-        {qid: 20, qstate: 0, qvalue: 100},
-        {qid: 21, qstate: 1, qvalue: 100},
-        {qid: 22, qstate: 2, qvalue: 100}
-    ]
-};
 
 
 })();

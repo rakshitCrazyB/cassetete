@@ -1,4 +1,4 @@
-<!--
+
 /*
  * Copyright (C) 2014 radsaggi(ashutosh)
  *
@@ -15,19 +15,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- -->
 
-<form name="formAnswer" id="form-answer" ng-controller="SubmitAnswerController as submitCtrl" ng-submit="submitCtrl.submit()">
-    <input id="ans" name="answer" ng-model="submitCtrl.answer" placeholder="Your answer here..." autocomplete="off"/>
-    <a href id="submit-btn" ng-click="submitCtrl.submit()">
-        <span class="btn-text">Submit</span>
+(function() {
 
-        <span class="btn-expandable">
-            <span class="btn-slide-text" ng-controller="TauntController as taunt">{{taunt.get()}}</span>
-            <span class="btn-icon-right">
-                <span></span>
-            </span>
-        </span>
-    </a>
-</form>
+var app = angular.module('services', ['ngResource']);
 
+app.factory('Profile', ['$resource', function($resource) {
+    return $resource('profile.php', {}, {
+      invoke: {method:'GET', isArray:false}
+    });
+}]);
+
+app.factory('Question', ['$resource', function($resource) {
+    return $resource('ques.php', {}, {
+      invoke: {method:'GET', params:{id:'@id'}, isArray:false}
+    });
+}]);
+
+})();

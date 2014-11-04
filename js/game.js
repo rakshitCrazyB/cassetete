@@ -19,16 +19,30 @@
 
 (function(){
 
-var app = angular.module('njath', ['profile', 'question']);
+var app = angular.module('njath', ['ngRoute', 'profile', 'question']);
 
-app.directive("navBar", function(){
+app.directive("navBar", function() {
     return {
         restrict: 'E',
         templateUrl: 'nav-bar.html'
     };
 });
 
-app.controller("DisplayController", function() {
+app.config(['$routeProvider', function($rp) {
+    $rp.when('/profile', {
+        templateUrl: 'profile.html',
+        controller: 'ProfileController',
+        controllerAs: 'profileCtrl'
+    }).when('/question', {
+        templateUrl: 'question.html',
+        controller: 'QuestionController',
+        controllerAs: 'question'
+    }).otherwise({
+        redirectTo: '/profile'
+    });
+}]);
+
+/*app.controller("DisplayController", function() {
     this.PAGES = PAGES;
     this.showing = PAGES.PROFILE_PAGE;
 
@@ -48,7 +62,7 @@ app.controller("DisplayController", function() {
 var PAGES = {
     PROFILE_PAGE: 0,
     QUESTION_PAGE: 1
-};
+};*/
 
 var userInfo = {name: "sunny" ,
     lscore: "450",

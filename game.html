@@ -28,22 +28,27 @@
         <link href="css/question.css" rel="stylesheet" type="text/css" />
 
         <script type="text/javascript" src="js/angular.min.js"></script>
+        <script type="text/javascript" src="js/angular-route.min.js"></script>
+        <script type="text/javascript" src="js/angular-resource.min.js"></script>
         <script type="text/javascript" src="js/game.js"></script>
+        <script type="text/javascript" src="js/services.js"></script>
         <script type="text/javascript" src="js/profile.js"></script>
         <script type="text/javascript" src="js/question.js"></script>
     </head>
-    <body ng-controller="DisplayController as display">
+    <body>
 
         <nav-bar></nav-bar>
 
-        <div id="profile-page" ng-show="display.showingProfilePage()">
+        <ng-view></ng-view>
+
+        <!--<div id="profile-page" ng-show="display.showingProfilePage()">
             <button-wrapper id="button-wrapper"></button-wrapper>
-        <!--<user-info id="user-info"></user-info>-->
+        <!--<user-info id="user-info"></user-info> ->
         </div>
 
         <div id="question-page" ng-show="display.showingQuestionPage()">
             <question-display></question-display>
             <form-wrapper id="form-wrapper"></form-wrapper>
-        </div>
+        </div>-->
     </body>
 </html>
