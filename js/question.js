@@ -73,12 +73,23 @@ app.controller("QuestionController", ['$scope','Question', function($scope, ques
     });
 }]);
 
-app.controller("SubmitAnswerController", function() {
+app.controller("SubmitAnswerController", ['Answer', '$location' function(ans, $location) {
     this.answer = "";
     this.submit = function () {
         alert("Your answer is " + this.answer);
+        var future = ans.invoke({id: 113, answer: this.answer}).$promise;
+        future.then(function(data) {
+            if (data.stat) {
+                alert('Yeah Right!');
+                $location.hash('profile');
+            } else {
+                alert('Incorrect Answer. Try again!');
+            }
+        }, function(error) {
+            alert('error: ' + error);
+        });
     };
-});
+}]);
 
 app.controller("TauntController", function() {
     this.get = function () {
