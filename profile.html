@@ -23,7 +23,8 @@
          <h3 class="type-label">level {{profile.level}}</h3>
          <ul>
              <li ng-repeat="q in profile.questions">
-                <a href ng-click="profile.openQuestion(q.qid)" class="a-btn {{profile.qstateString(q)}}">
+                <!--Question {{q.qno}}-->
+                <a href ng-click="profile.openQuestion(q.qno)" class="a-btn {{profile.qstateString(q)}}">
                     <span class="a-btn-slide-text">{{q.qvalue}}</span>
                     <img ng-src="{{profile.qimage(q)}}" alt="{{profile.qstateString(q)}}"/>
                     <span class="a-btn-text">
