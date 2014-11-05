@@ -23,8 +23,8 @@ var app = angular.module('profile', ['services']);
 
 app.controller("ProfileController", ['$location','Profile', function($location, profile) {
     var buttonwrapper = this;
-    this.openQuestion = function(qid) {
-        $location.hash('/question/' + qid);
+    this.openQuestion = function(qno) {
+        $location.url('/question/' + qno).replace();
     };
     var setup = function(profileState) {
         buttonwrapper.level = profileState.level;
@@ -56,12 +56,12 @@ app.controller("ProfileController", ['$location','Profile', function($location, 
             username: 'radsaggi',
             level: 1,
             levelquestions: [
-                {qid: 10, qstate: 0, qvalue: 100},
-                {qid: 11, qstate: 1, qvalue: 100},
-                {qid: 12, qstate: 2, qvalue: 100},
-                {qid: 20, qstate: 0, qvalue: 100},
-                {qid: 21, qstate: 1, qvalue: 100},
-                {qid: 22, qstate: 2, qvalue: 100}
+                {qno: 10, qstate: 0, qvalue: 100},
+                {qno: 11, qstate: 1, qvalue: 100},
+                {qno: 12, qstate: 2, qvalue: 100},
+                {qno: 20, qstate: 0, qvalue: 100},
+                {qno: 21, qstate: 1, qvalue: 100},
+                {qno: 22, qstate: 2, qvalue: 100}
             ]
         };
         setup(profileState);
