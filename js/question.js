@@ -49,7 +49,7 @@ app.controller("QuestionController", ['$routeParams','Question', function($route
     }
 
     var handler = function(error) {
-        alert(error.status + " " + error.statusText + ": " + JSON.stringify(error.error));
+        alert(error.status + " " + error.statusText + ": " + error.data);
         var quest = {
             type: 3,
             id: 123,
@@ -79,7 +79,7 @@ app.controller("SubmitAnswerController", ['$routeParams', 'Answer', '$location',
                 alert('Incorrect Answer. Try again!');
             }
         }, function(error) {
-            alert(error.status + " " + error.statusText + ": " + JSON.stringify(error.error));
+            alert(error.status + " " + error.statusText + ": " + error.data);
         });
     };
 }]);
