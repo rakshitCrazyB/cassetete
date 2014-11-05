@@ -21,8 +21,11 @@
 
 var app = angular.module('profile', ['services']);
 
-app.controller("ProfileController", ['$scope','Profile', function($scope, profile) {
+app.controller("ProfileController", ['$location','Profile', function($location, profile) {
     var buttonwrapper = this;
+    this.openQuestion = function(qid) {
+        $location.hash('/question/' + qid);
+    };
     var setup = function(profileState) {
         buttonwrapper.level = profileState.level;
         buttonwrapper.questions = profileState.levelquestions;
@@ -43,13 +46,11 @@ app.controller("ProfileController", ['$scope','Profile', function($scope, profil
     };
 
     var future = profile.invoke().$promise;
-    alert("Happy Birthday");
     future.then(function(data) {
         var profileState = data;
-        alert("Happy Budday");
         setup(profileState);
     }, function(error) {
-        alert("Error: " + error);
+        alert("Error: " + error.error);
         var profileState = {
             score: 560,
             username: 'radsaggi',
@@ -67,9 +68,6 @@ app.controller("ProfileController", ['$scope','Profile', function($scope, profil
     });
 }]);
 
-
-//app.controller("ProfileController", function() {
-//});
 
 /*app.directive("userInfo", function(){
     return{

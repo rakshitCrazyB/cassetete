@@ -39,7 +39,7 @@ var taunts = [
 });*/
 
 
-app.controller("QuestionController", ['$scope','Question', function($scope, question) {
+app.controller("QuestionController", ['$routeParams','Question', function($routeParams, question) {
     var display = this;
     var setup = function(question) {
         display.text = question.text;
@@ -57,12 +57,12 @@ app.controller("QuestionController", ['$scope','Question', function($scope, ques
         }
     }
 
-    var future = question.invoke({id: 112}).$promise;
+    var future = question.invoke({id: $routeParams.id}).$promise;
     future.then(function(data) {
         var quest = data;
         setup(quest);
     }, function(error) {
-        alert("Error: " + error);
+        alert("Error: " + error.error);
         var quest = {
             type: 3,
             id: 123,
@@ -73,7 +73,7 @@ app.controller("QuestionController", ['$scope','Question', function($scope, ques
     });
 }]);
 
-app.controller("SubmitAnswerController", ['Answer', '$location' function(ans, $location) {
+app.controller("SubmitAnswerController", ['Answer', '$location', function(ans, $location) {
     this.answer = "";
     this.submit = function () {
         alert("Your answer is " + this.answer);
@@ -81,12 +81,12 @@ app.controller("SubmitAnswerController", ['Answer', '$location' function(ans, $l
         future.then(function(data) {
             if (data.stat) {
                 alert('Yeah Right!');
-                $location.hash('profile');
+                $location.hash('/profile');
             } else {
                 alert('Incorrect Answer. Try again!');
             }
         }, function(error) {
-            alert('error: ' + error);
+            alert('error: ' + error.error);
         });
     };
 }]);
