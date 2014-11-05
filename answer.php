@@ -30,85 +30,56 @@ $CHV[1] = array(
 );
 require_once 'chv.php';
 	
-function checkAnswer($qno,$answer,$uname,$current)
+function checkAnswer($qno, $answer, $uname, $current)
 {
-	$flag=0;
-	foreach($current->levelquestions as $b)	{
-	    if($b['qno']==$qno) {
-	        $qid=$b['qid'];
-	    }
-	}
-
-	foreach($current->levelquestions as $qarr) {
-		if($qarr['qid'] == $qid) {
-			$flag++;
-			if($qarr['qstate'] == 2) {
-			    $error['error'] = "alredy answered";
-				http_respond(400, $error);
-			}
+    $qid = 0;
+	foreach($current->levelquestions as $qarr) if($qarr['qno'] == $qno) {
+		$qid = $qarr['qid'];
+		if($qarr['qstate'] == 2) {
+		    $error['error'] = "already answered";
+			http_respond(400, $error);
 		}
 	}
 	
-	if($flag==0) {
+	if($qid == 0) {
 	    //question not in levelquestions array
 		http_respond(400);
 	}
 	
 	$question = getQuestion($qid);
 	if($answer == $question->answer) {
-		$scobt=$question->cscore;
-		$user = $current->username;
+		$scobt = getQuestionCurrScore($question);
 		$timeAns = time();	
-		$scobt = getQuestionCurrScore();
-		$query = "UPDATE `Questions-$user` 
+
+		$query = "UPDATE `Questions-$uname` 
 		            SET `Attempts`=`Attempts` + 1,`Time Answered`=$timeAns, `Obtained Score`=$scobt 
 		            WHERE `Question ID` = '$qid';";
-		$db_connection = $GLOBALS['db_connection'];
-		if(!isset($db_connection)) {
-			
-			http_respond(500);
-		}
-		else
-		{	
-			$question->cscore=50;/////to be changed
-			$result=mysqli_query($db_connection,$query);//query to increment attempts
-			if(!$result)
-			{
-			    http_respon(500);
-			}
-			$q=getQuestion($qid);
-			$q->numsolved++;
-			$q->write_back();
-			$current->score+=$question->cscore;
-			$current->write_back();
-			if(!$result)
-			{
-				http_respond(500);
-			}
-			$tosend['stat']=1;
-			http_respond(200,$tosend);
-		}
+
+		questionAnsweredCorrect($question, $current);
+		
+		$question->numsolved++;
+		$current->score += $scobt;
+
+		$tosend['stat'] = 1;
+        $responseCode = 200;
+	} else {
+		$query = "UPDATE `Questions-$uname` SET `Attempts` = `Attempts`+1  WHERE `Question ID` = '$qid'	";	
+
+        questionAnsweredIncorrect($question, $current);
+
+		$tosend['stat'] = 0;
+	    $responseCode = 406;
 	}
-	else
-	{
-		$query = "UPDATE `Questions-$uname` SET `Attempts` = `Attempts`+1  WHERE `Question ID` = '$qid'	";
-		$db_connection = $GLOBALS['db_connection'];
-		if(!isset($db_connection))
-		{
-			http_respond(500);
-		}
-		else
-		{
-			$result=mysqli_query($db_connection,$query);//query to increment attempts
-			if(!$result)
-			{
-				http_respond(500);
-			}
-			$tosend['stat']=0;
-			http_respond(200,$tosend);
-		}
-	}
+	
+	$result=dbquery($query);
+	
+	$question->write_back();	
+	$current->write_back();
+	
+	http_respond($responseCode, $tosend);
 }
-checkAnswer($jsobj['qno'],$jsobj['answer'],$AUTH['uname'],$AUTH['user']);
+
+
+checkAnswer($CHV['CALL_ARGS']['qno'],$CHV['CALL_ARGS']['answer'],$AUTH['uname'],$AUTH['user']);
 	
 ?>

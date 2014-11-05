@@ -29,6 +29,7 @@ require_once("httprespond.php");
 
 $AUTH['status'] = false;
 $AUTH['uname'] = null;
+$AUTH['user'] = null;
 $uname = null;
 
 if($AUTH['required']) {

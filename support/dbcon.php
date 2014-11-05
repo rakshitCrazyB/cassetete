@@ -17,6 +17,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+require_once('httprespond.php');
+
+function dbquery($query)
+{
+    global $db_connection;
+	if(!isset($db_connection)) {
+		http_respond(500);
+	}
+	
+	$result=mysqli_query($db_connection, $query);
+	if(!$result) {
+	    http_respond(500);
+	}
+	return $result;
+}
 
 if (!file_exists("./support/check.php")) {
     header("Location: ./index.php");

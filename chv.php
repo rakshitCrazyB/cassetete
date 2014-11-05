@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright (C) 2014 crazyb(Rakshit) , SageEx(Arindam) , Codez266()Sumit)
  *
@@ -15,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 /** 
  * Arguments 
  * CHV[idx] = an array representing the required arguments and their matching regex
@@ -22,7 +24,7 @@
  * 
  * Return 
  * CHV['CALL_METHOD'] the method actually used.
- * CHV['ALL_OKAY'] 
+ * CHV['CALL_ARGS'] the arguments received and have been verified 
  */
 
 require_once("httprespond.php");
@@ -38,8 +40,11 @@ $chv_vars = array(
     //2 => $_PUT,
 );
 
+$CHV['CALL_METHOD'] = -1;
+$CHV['CALL_ARGS']   = array();
+$jsobj = null;
 
-function hasMethod($num,$chvmeth)
+function hasMethod($num, $chvmeth)
 {
 	return $chvmeth == $num;
 }
@@ -50,14 +55,13 @@ function error($msg)
     http_respond(400, $error);
 }
 
-if($_SERVER['REQUEST_METHOD'] == 'POST'&& $_SERVER['CONTENT_TYPE'] != 'application/json') {
-    error("require content-type application/json");
-}
-
-
 for ($i = 0; $i < 2; $i ++) if (hasMethod($i, $CHV['METHOD'])) {
 	if ($_SERVER['REQUEST_METHOD'] == $chv_methods[$i]) {
-	    $allOK = TRUE;
+	    
+	    if($_SERVER['REQUEST_METHOD'] == 'POST' && $chv_vars[1] == null) {
+            error("require content-type application/json");
+        }
+	    
       	$jsobj = $chv_vars[$i];
 		//$CHV['CALL_METHOD'] = $chv_methods[$i];
 		foreach ($CHV[$i] as $arg => $regex) {
@@ -73,10 +77,13 @@ for ($i = 0; $i < 2; $i ++) if (hasMethod($i, $CHV['METHOD'])) {
                 error("require ${chv_methods[$i]} argument ${arg}");
 			}
 		}
-		break;
+		
+		$CHV['CALL_ARGS'] = $jsobj;
+		return;
 	}
 }
 
-
+$error['error'] = "Need ${chv_methods[$CHV['METHOD']]}";
+http_respond(405, $error);
 
 ?>

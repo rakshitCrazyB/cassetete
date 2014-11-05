@@ -16,22 +16,38 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
+require_once("support/dbcon.php");
 require_once("userclass.php");
 require_once("Question.php");
-require_once("support/dbcon.php");
 
 
-function getQuestionCost() {
+function getQuestionCost()
+{
 	return 100;
 }
 
-function getQuestionCurrScore() {
+function getQuestionCurrScore($question)
+{
     return 100;
 }
 
-function getQuestionScore() {
+function getQuestionScore()
+{
 	return 100;
 }
-	
+//this question opened first time by user . DO Stuff(like deduct cost)
+function firstTimeQOpened()  
+{
+    
+}
+function questionAnsweredCorrect($question, $current)
+{
+
+}
+function questionAnsweredIncorrect($question, $current)
+{
+
+}
+
+
 ?>

@@ -29,7 +29,7 @@ $CHV[0] = array(
 );
 require_once('chv.php');
 
-function tosend($player)
+function tosend($q)
 {
     $tosend['type'] = $q->type;
     $tosend['bscore'] = $q->bscore;
@@ -37,7 +37,7 @@ function tosend($player)
     $tosend['id'] = $q->id;
     $tosend['image']= $q->image;
 	$tosend['text'] = $q->text;
-	retrun $tosend;    
+	return $tosend;    
 }
 
 function questioncall($jsobj, $uname, $current)	
@@ -62,6 +62,7 @@ function questioncall($jsobj, $uname, $current)
 			if($c == 0) { //Question unopened
 				$q->numopened++;
 				$q->write_back();
+				quesOpened($current); 
 				$d = time();
 				$qry = "update `Questions-$uname` set `Time Opened`=$d where `Question ID`=$value";
 				$db_connection = $GLOBALS['db_connection'];
