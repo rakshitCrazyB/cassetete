@@ -57,7 +57,7 @@ app.controller("QuestionController", ['$routeParams','Question', function($route
         }
     }
 
-    var future = question.invoke({id: $routeParams.id}).$promise;
+    var future = question.invoke({qno: $routeParams.qno}).$promise;
     future.then(function(data) {
         var quest = data;
         setup(quest);
@@ -73,15 +73,15 @@ app.controller("QuestionController", ['$routeParams','Question', function($route
     });
 }]);
 
-app.controller("SubmitAnswerController", ['Answer', '$location', function(ans, $location) {
+app.controller("SubmitAnswerController", ['$routeParams', 'Answer', '$location', function($rp, ans, $location) {
     this.answer = "";
     this.submit = function () {
         alert("Your answer is " + this.answer);
-        var future = ans.invoke({id: 113, answer: this.answer}).$promise;
+        var future = ans.invoke({qno: $rp.qno, answer: this.answer}).$promise;
         future.then(function(data) {
             if (data.stat) {
                 alert('Yeah Right!');
-                $location.hash('/profile');
+                $location.url('/profile');
             } else {
                 alert('Incorrect Answer. Try again!');
             }
