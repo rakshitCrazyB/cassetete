@@ -22,27 +22,27 @@
  * 
  * Return
  * AUTH['status'] Authenticated?
+ * AUTH['uname'] The username of authenticated user
+ * AUTH['user'] The user object of authenticated user
  */
-require("httprespond.php");
-$AUTH['status']=true;
-$uname=0;
+require_once("httprespond.php");
+
+$AUTH['status'] = false;
+$AUTH['uname'] = null;
+$uname = null;
+
 if($AUTH['required']) {
 	session_start();
+	
 	if(isset($_SESSION['username'])) {
-		$uname=$_SESSION['username'];
-		require_once("userclass.php");
-		$status=true;
-		$current=new player();
-		$current->setPlayer($uname);
-		if($current->disqualified==1)
-		{
-			$tosend['error']="DQ";
-			http_respond(406,$tosend);
-		}
-	}
-	else{
+		$AUTH['uname'] = $_SESSION['username'];
+		$AUTH['status'] = true;
+		
+		require_once('userclass.php');
+		$AUTH['user'] = new player();
+    	$AUTH['user']->setPlayer($AUTH['uname']);
+	} else {
 		http_respond(401);
-		$AUTH['status'] = false;
 	}
 }
 

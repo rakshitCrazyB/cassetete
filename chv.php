@@ -25,6 +25,7 @@
  * CHV['ALL_OKAY'] 
  */
 
+require_once("httprespond.php");
 
 $chv_methods = array(
     0 => 'GET',
@@ -33,7 +34,7 @@ $chv_methods = array(
 );
 $chv_vars = array(
     0 => $_GET,
-    1 => $_POST,
+    1 => json_decode(file_get_contents("php://input")),
     //2 => $_PUT,
 );
 
@@ -43,28 +44,33 @@ function hasMethod($num,$chvmeth)
 	return $chvmeth == $num;
 }
 
-$allOK=null;
-$temp;
+function error($msg)
+{
+    $error['error'] = $msg;
+    http_respond(400, $error);
+}
+
+if($_SERVER['REQUEST_METHOD'] == 'POST'&& $_SERVER['CONTENT_TYPE'] != 'application/json') {
+    error("require content-type application/json");
+}
+
+
 for ($i = 0; $i < 2; $i ++) if (hasMethod($i, $CHV['METHOD'])) {
 	if ($_SERVER['REQUEST_METHOD'] == $chv_methods[$i]) {
 	    $allOK = TRUE;
       	$jsobj = $chv_vars[$i];
 		//$CHV['CALL_METHOD'] = $chv_methods[$i];
 		foreach ($CHV[$i] as $arg => $regex) {
-			$temp[$i] = null;
+			$temp[$i] = false;
 			if (array_key_exists($arg, $jsobj)) {
 			    $temp[$i] = filter_var($jsobj[$arg], FILTER_VALIDATE_REGEXP, 
 			        array("options" => array("regexp" => "$regex"))
 			    );
+			} else {
+                error("require ${chv_methods[$i]} argument ${arg}");
 			}
-			else
-			{
-			    $allOK=false;
-			    break;
-			}
-			if ($temp[$i] == false) {		
-				$allOK=false;
-				break;
+			if ($temp[$i] == false) {
+                error("require ${chv_methods[$i]} argument ${arg}");
 			}
 		}
 		break;

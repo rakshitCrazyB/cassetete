@@ -15,32 +15,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */	
-$AUTH['required']=true;
 require 'server.php';
+
+$AUTH['required']=true;
 require_once("auth.php");
-if($AUTH['status'])
-{
-	getProfile($uname);
-}
-	function getProfile($uname)
-	{	$username=$uname;
-		$user = new player;
-		$user->setPlayer($username);
-		$userdetails = array();
-		$userdetails['username'] = $user->username;
-		$userdetails['score'] = $user->score;
-		$userdetails['level'] = $user->level;
-		$userdetails['disqualified'] = $user->disqualified;
-		$userdetails['tchests'] = $user->tchests;
-		$b=array();
-		foreach($user->levelquestions as $a)
-		{
-		   $temp['qno']=$a['qno'];
-		   $temp['qstate']=$a['qstate'];
-		   $b[]=$temp;
-		}
-		$userdetails['levelquestions'] = $b;
-		http_respond(200,$userdetails);
+
+
+function getProfile($uname)
+{	
+    $username=$uname;
+	$user = new player;
+	$user->setPlayer($username);
+	$userdetails = array();
+	$userdetails['username'] = $user->username;
+	$userdetails['score'] = $user->score;
+	$userdetails['level'] = $user->level;
+	$userdetails['disqualified'] = $user->disqualified;
+	$userdetails['tchests'] = $user->tchests;
+	$userdetails['levelquestions'] = array();
+	foreach($user->levelquestions as $a) {
+	   $temp['qno'] = $a['qno'];
+	   $temp['qstate'] = $a['qstate'];
+	   $userdetails['levelquestions'][] = $temp;
 	}
+
+	http_respond(200,$userdetails);
+}
+
+getProfile($AUTH['uname']);
 ?>
 	
