@@ -33,7 +33,7 @@ app.config(['$routeProvider', function($rp) {
         templateUrl: 'profile.html',
         controller: 'ProfileController',
         controllerAs: 'profile'
-    }).when('/question', {
+    }).when('/question/:id', {
         templateUrl: 'question.html',
         controller: 'QuestionController',
         controllerAs: 'question'
