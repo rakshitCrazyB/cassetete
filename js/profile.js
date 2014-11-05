@@ -21,32 +21,41 @@
 
 var app = angular.module('profile', ['services']);
 
-app.controller("ProfileController", ['$location','Profile', function($location, profile) {
+var setup = function(profileState) {
+    buttonwrapper.level = profileState.level;
+    buttonwrapper.questions = profileState.levelquestions;
+    buttonwrapper.qimage = function(question) {
+        switch (question.qstate) {
+            case 0: return "images/quest2.png";
+            case 1: return "images/exclaim.png";
+            case 2: return "images/tick.png";
+        }
+    };
+    buttonwrapper.qstateString = function(question) {
+        switch (question.qstate) {
+            case 0: return "unopened";
+            case 1: return "opened";
+            case 2: return "answered";
+        }
+    };
+};
+
+app.controller("ProfileController", ['$location','Profile', 'Advance', function($location, profile, advance) {
     var buttonwrapper = this;
     this.openQuestion = function(qno) {
         $location.url('/question/' + qno).replace();
     };
-    var setup = function(profileState) {
-        buttonwrapper.level = profileState.level;
-        buttonwrapper.questions = profileState.levelquestions;
-        buttonwrapper.qimage = function(question) {
-            switch (question.qstate) {
-                case 0: return "images/quest2.png";
-                case 1: return "images/exclaim.png";
-                case 2: return "images/tick.png";
-            }
-        };
-        buttonwrapper.qstateString = function(question) {
-            switch (question.qstate) {
-                case 0: return "unopened";
-                case 1: return "opened";
-                case 2: return "answered";
-            }
-        };
+    this.advanceLevel = function() {
+        var future = advance.invoke().$promise;
+        future.then(function(data){
+            $location.url('/profile');
+        }, function(error){
+            alert(error.status + " " + error.statusText + ": " + error.data);
+        });
     };
 
     var handler = function(error) {
-        alert(error.status + " " + error.statusText + ": " + JSON.stringify(error.error));
+        alert(error.status + " " + error.statusText + ": " + error.data);
         var profileState = {
             score: 560,
             username: 'radsaggi',

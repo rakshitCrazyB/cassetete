@@ -38,4 +38,10 @@ app.factory('Answer', ['$resource', function($resource) {
     });
 }]);
 
+app.factory('Advance', ['$resource', function($resource) {
+    return $resource('advance.php', {}, {
+      invoke: {method:'POST', isArray:false}
+    });
+}]);
+
 })();
