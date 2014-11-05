@@ -45,12 +45,8 @@ app.controller("ProfileController", ['$location','Profile', function($location, 
         };
     };
 
-    var future = profile.invoke().$promise;
-    future.then(function(data) {
-        var profileState = data;
-        setup(profileState);
-    }, function(error) {
-        alert("Error: " + error.error);
+    var handler = function(error) {
+        alert(error.status + " " + error.statusText + ": " + JSON.stringify(error.error));
         var profileState = {
             score: 560,
             username: 'radsaggi',
@@ -65,7 +61,13 @@ app.controller("ProfileController", ['$location','Profile', function($location, 
             ]
         };
         setup(profileState);
-    });
+    };
+
+    var future = profile.invoke().$promise;
+    future.then(function(data) {
+        var profileState = data;
+        setup(profileState);
+    }, handler);
 }]);
 
 

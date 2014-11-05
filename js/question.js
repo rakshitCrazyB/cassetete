@@ -29,15 +29,6 @@ var taunts = [
     "Very peculiar!"
 ];
 
-/*app.controller("QuestionController", function() {
-    question = {
-        type: 3,
-        id: 123,
-        text: "Who am i?",
-        image: '0Wcc.png'
-    };
-});*/
-
 
 app.controller("QuestionController", ['$routeParams','Question', function($routeParams, question) {
     var display = this;
@@ -57,12 +48,8 @@ app.controller("QuestionController", ['$routeParams','Question', function($route
         }
     }
 
-    var future = question.invoke({qno: $routeParams.qno}).$promise;
-    future.then(function(data) {
-        var quest = data;
-        setup(quest);
-    }, function(error) {
-        alert("Error: " + error.error);
+    var handler = function(error) {
+        alert(error.status + " " + error.statusText + ": " + JSON.stringify(error.error));
         var quest = {
             type: 3,
             id: 123,
@@ -70,7 +57,13 @@ app.controller("QuestionController", ['$routeParams','Question', function($route
             image: '0Wcc.png'
         };
         setup(quest);
-    });
+    };
+
+    var future = question.invoke({qno: $routeParams.qno}).$promise;
+    future.then(function(data) {
+        var quest = data;
+        setup(quest);
+    }, handler);
 }]);
 
 app.controller("SubmitAnswerController", ['$routeParams', 'Answer', '$location', function($rp, ans, $location) {
@@ -86,7 +79,7 @@ app.controller("SubmitAnswerController", ['$routeParams', 'Answer', '$location',
                 alert('Incorrect Answer. Try again!');
             }
         }, function(error) {
-            alert('error: ' + error.error);
+            alert(error.status + " " + error.statusText + ": " + JSON.stringify(error.error));
         });
     };
 }]);

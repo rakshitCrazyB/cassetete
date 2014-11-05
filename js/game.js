@@ -24,7 +24,9 @@ var app = angular.module('njath', ['ngRoute', 'profile', 'question']);
 app.directive("navBar", function() {
     return {
         restrict: 'E',
-        templateUrl: 'nav-bar.html'
+        templateUrl: 'nav-bar.html',
+        controller: 'NavBarController',
+        controllerAs: 'navBarCtrl'
     };
 });
 
@@ -42,27 +44,13 @@ app.config(['$routeProvider', function($rp) {
     });
 }]);
 
-/*app.controller("DisplayController", function() {
-    this.PAGES = PAGES;
-    this.showing = PAGES.PROFILE_PAGE;
-
-    this.showingProfilePage = function() {
-        return this.showing == PAGES.PROFILE_PAGE;
+app.controller("NavBarController", ['$location', function($location) {
+    var showProfileButton = function() {
+        return $location.url() == '/profile';
     };
-    this.showingQuestionPage = function() {
-        return this.showing == PAGES.QUESTION_PAGE;
-    }
+}]);
 
 
-    this.showPage = function(page) {
-        this.showing = page;
-    };
-});
-
-var PAGES = {
-    PROFILE_PAGE: 0,
-    QUESTION_PAGE: 1
-};*/
 
 var userInfo = {name: "sunny" ,
     lscore: "450",
