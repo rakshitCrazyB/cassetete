@@ -32,7 +32,14 @@ if($AUTH['status'])
 		$userdetails['level'] = $user->level;
 		$userdetails['disqualified'] = $user->disqualified;
 		$userdetails['tchests'] = $user->tchests;
-		$userdetails['levelquestions'] = $user->levelquestions;
+		$b=array();
+		foreach($user->levelquestions as $a)
+		{
+		   $temp['qno']=$a['qno'];
+		   $temp['qstate']=$a['qstate'];
+		   $b[]=$temp;
+		}
+		$userdetails['levelquestions'] = $b;
 		http_respond(200,$userdetails);
 	}
 ?>

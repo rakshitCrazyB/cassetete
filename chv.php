@@ -29,8 +29,7 @@
 $chv_methods = array(
     0 => 'GET',
     1 => 'POST',
-    2 => 'PUT',
-    //3 => "DELETE",
+    //2 => 'PUT',
 );
 $chv_vars = array(
     0 => $_GET,
@@ -39,34 +38,31 @@ $chv_vars = array(
 );
 
 
-
-	// $id=$jsobj['id'];
-	// $answer=$jsobj['answer'];	
-	// $uname=$_SESSION['username'];
 function hasMethod($num,$chvmeth)
 {
-	if($chvmeth==$num)
-	{
-		return TRUE;
-	}
-	return false;	
+	return $chvmeth == $num;
 }
-
 
 $allOK=null;
 $temp;
-for ($i = 0; $i < 2; $i ++) if (hasMethod($i,$CHV['METHOD']))
-{
-	if ($_SERVER['REQUEST_METHOD'] == $chv_methods[$i]) 
-	{
-	        $allOK=TRUE;
-      		$jsobj = $chv_vars[$i];
+for ($i = 0; $i < 2; $i ++) if (hasMethod($i, $CHV['METHOD'])) {
+	if ($_SERVER['REQUEST_METHOD'] == $chv_methods[$i]) {
+	    $allOK = TRUE;
+      	$jsobj = $chv_vars[$i];
 		//$CHV['CALL_METHOD'] = $chv_methods[$i];
-		foreach ($CHV[$i] as $arg => $regex) 
-		{
-			$temp[$i]=filter_var($jsobj[$arg],FILTER_VALIDATE_REGEXP,array("options"=>array("regexp"=>"$regex")));
-			if($temp[$i]==false)
-			{		
+		foreach ($CHV[$i] as $arg => $regex) {
+			$temp[$i] = null;
+			if (array_key_exists($arg, $jsobj)) {
+			    $temp[$i] = filter_var($jsobj[$arg], FILTER_VALIDATE_REGEXP, 
+			        array("options" => array("regexp" => "$regex"))
+			    );
+			}
+			else
+			{
+			    $allOK=false;
+			    break;
+			}
+			if ($temp[$i] == false) {		
 				$allOK=false;
 				break;
 			}

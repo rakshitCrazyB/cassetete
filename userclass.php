@@ -16,7 +16,7 @@
  */
 class player
 {
-	public  $username, $score,$level,$disqualified,$tchests,$levelquestions=array();//qid, qstate(0-unopned,1- opened,2-answereed) qvalue
+	public  $username, $score,$level,$disqualified,$tchests,$levelquestions=array();//qno( accordin to user table),qid, qstate(0-unopned,1- opened,2-answereed) qvalue///make funct for qvalue
 			
 	function setPlayer($uname)
 	{
@@ -26,7 +26,6 @@ class player
 		$result=mysqli_query($db_connection,$qry);
 		if($result==false)
 		{			
-			echo "eroor1";
 			http_respond(500);
 		}
 		if(mysqli_num_rows($result)==1)
@@ -38,7 +37,6 @@ class player
 		$result=mysqli_query($db_connection,$qry);
 		if($result==false)
 		{
-			echo "eroor2";
 			http_respond(500);
 		}
 		if(mysqli_num_rows($result)==1)
@@ -53,13 +51,13 @@ class player
 		$result=mysqli_query($db_connection,$qry);
 		if($result==false)
 		{
-			echo "eroor3";
 			http_respond(500);
 		}
 		else
 		{
 			while($row=mysqli_fetch_array($result))
 			{
+				$temp['qno']=$row['Question Number'];
 				$temp['qid']=$row['Question ID'];
 				if($row['Time Opened']==-1 && $row['Time Answered']==-1)
 				{
@@ -80,7 +78,6 @@ class player
 
 	function write_back()
 	{
-		echo "hi";
 		$level=$this->level;
 		$score=$this->score;
 		$tchests=$this->tchests;
@@ -90,18 +87,9 @@ class player
 		$result=mysqli_query($db_connection,$qry);
 		if(!$result)
 		{
-			echo "eroor5";
 			http_respond(500);
 		}
 	}	
 }	
-						
-						
-					
-				
-				
-									
-					
-			
-		
-		 
+
+?>

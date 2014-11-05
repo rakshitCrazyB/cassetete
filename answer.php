@@ -25,7 +25,7 @@ require_once("auth.php");
 
 $CHV['METHOD'] = 1;
 $CHV[1] = array(
-    	"id" => '/[0-9]{3}/',
+    	"qno" => '/[0-9]{2}/',
    	"answer" => '/[a-zA-z0-9_]+/',
 	);
 
@@ -37,24 +37,30 @@ if($allOK==false|| $AUTH['status']==0)
 }
 else
 {		
-		checkAnswer($jsobj['id'],$jsobj['answer'],$uname);
+		checkAnswer($jsobj['qno'],$jsobj['answer'],$uname);
 }
-function checkAnswer($qid,$answer,$uname)// answer,qid feilds
+function checkAnswer($qno,$answer,$uname)// answer,qid feilds
 	{
 		$current=new player();
 		$current->setPlayer($uname);
 		$flag=0;
+		foreach($current->levelquestions as $b)
+		{
+		    if($b['qno']==$qno)
+		    {
+		        $qid=$b['qid'];
+		    }
+		}
 		for($i=0;$i<sizeof($current->levelquestions);$i++)
 		{
 
 			if($current->levelquestions[$i]['qid']==$qid)
 			{
 				$flag++;
-				echo $current->levelquestions[$i]['qstate'];
 				if($current->levelquestions[$i]['qstate']==2)
 				{
-					echo "hyuio";
-					http_respond(400);   // already answered
+				    $error['error']="alredy answered";
+					http_respond(400,$error);   // already answered
 				}
 			}
 		}
@@ -80,7 +86,6 @@ function checkAnswer($qid,$answer,$uname)// answer,qid feilds
 				else
 				{	
 					$question->cscore=50;/////to be changed
-					echo $query;
 					$result=mysqli_query($db_connection,$query);//query to increment attempts
 					$q=getQuestion($qid);
 					$q->numsolved++;
@@ -89,7 +94,6 @@ function checkAnswer($qid,$answer,$uname)// answer,qid feilds
 					$current->write_back();
 					if(!$result)
 					{
-						echo "eooro 5";
 						http_respond(500);
 					}
 					$tosend['stat']=1;
@@ -109,7 +113,6 @@ function checkAnswer($qid,$answer,$uname)// answer,qid feilds
 					$result=mysqli_query($db_connection,$query);//query to increment attempts
 					if(!$result)
 					{
-						echo "eooro 5";
 						http_respond(500);
 					}
 					$tosend['stat']=0;

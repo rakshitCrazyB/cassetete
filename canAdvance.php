@@ -1,6 +1,3 @@
-
-
-
 <?php
 /*
  * Copyright (C) 2014 crazyb(Rakshit) , SageEx(Arindam) , Codez266()Sumit)

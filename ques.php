@@ -20,7 +20,7 @@ $AUTH['required']=true;
 require_once("auth.php");
 $CHV['METHOD'] = 0;
 $CHV[0] = array(
-    	"id" => '/[0-9]{3}/',
+    	"qno" => '/[0-9]{2}/',
 	);
 require_once('chv.php');
 if(!$allOK||!$AUTH['status'])
@@ -36,7 +36,8 @@ else
 	
 function questioncall( $jsobj,$uname)	
 {	
-	$value=$jsobj['id'];	
+	$cost=10;/////to be changed
+	$value=$jsobj['qno'];	
 	$current=new player();
 	$current->setPlayer($uname);
 	if($current->score<$cost)
@@ -44,7 +45,7 @@ function questioncall( $jsobj,$uname)
 		$tosend['error']="not enough score";	
 		http_respond(403,$tosend);
 	}
-	else if(intval($value/100)!=$current->level)
+	else if(intval($value/10)!=$current->level)
 	{
 		$tosend['error']="wrong level";	
 		http_respond(403,$tosend);	
@@ -56,9 +57,11 @@ function questioncall( $jsobj,$uname)
 		$flag=0;
 		for($i=0;$i<sizeof($b);$i++)
 		{
-			$q=getQuestion($value);
-			if($b[$i]['qid']==$value)
+			if($b[$i]['qno']==$value)
 			{
+
+			    $value=$b[$i]['qid'];
+	    	    $q=getQuestion($value);
 				$flag++;
 				$c=$b[$i]['qstate'];
 				if($c==0)
@@ -71,13 +74,24 @@ function questioncall( $jsobj,$uname)
 					$result=mysqli_query($db_connection,$qry);
 					if($result==false)
 					{
-						echo "error 99";
 						http_respond(500);
 					}
+					$tosend['type'] = $q->type;
+		            $tosend['bscore'] = $q->bscore;
+	            	$tosend['cscore'] = $q->cscore;
+		            $tosend['id'] = $q->id;
+		            $tosend['image']= $q->image;
+	            	$tosend['text'] = $q->text;	
+					
 				}
 				else if ($c==1)
 				{
-					//nttn
+                    $tosend['type'] = $q->type;
+		            $tosend['bscore'] = $q->bscore;
+	            	$tosend['cscore'] = $q->cscore;
+		            $tosend['id'] = $q->id;
+		            $tosend['image']= $q->image;
+	            	$tosend['text'] = $q->text;	
 				}				
 				else if($c==2)
 				{
@@ -88,16 +102,10 @@ function questioncall( $jsobj,$uname)
 		}
 		if($flag==0)
 		{
-			echo "eroor wala yolo";
+		    $tosend=null;
 			$error['error']="Someting wrong";
 			http_respond(403,$error);
-		}
-		$tosend['type'] = $q->type;
-		$tosend['bscore'] = $q->bscore;
-		$tosend['cscore'] = $q->cscore;
-		$tosend['id'] = $q->id;
-		$tosend['image']= $q->image;
-		$tosend['text'] = $q->text;		
+		}	
 	}
 	http_respond(200,$tosend);
 }

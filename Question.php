@@ -56,7 +56,6 @@
 			$db_connection = $GLOBALS['db_connection'];
 			if(!isset($db_connection))
 			{
-				echo "error 1";
 				http_respond(500);
 			}
 			else
@@ -69,13 +68,11 @@
 				$result=mysqli_query($db_connection,$query1);
 				if(!$result)
 				{
-					echo "error 6";
 					http_respond(500);
 				}	
 				$result=mysqli_query($db_connection,$query2);
 				if(!$result)
 				{
-					echo "error 7";
 					http_respond(500);
 				}
 											
@@ -91,7 +88,6 @@
 				if(!isset($db_connection))
 				{
 					http_respond(500);
-					echo "error 2";
 				}
 				else
 				{	
